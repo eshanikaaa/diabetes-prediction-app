@@ -1,4 +1,16 @@
 import streamlit as st
+import joblib
+import pandas as pd
+
+st.write("✅ App Started")
+
+try:
+    model = joblib.load("diabetes_model.pkl")
+    st.write("✅ Model Loaded Successfully")
+except Exception as e:
+    st.error(f"❌ Failed to load model: {e}")
+
+import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
