@@ -19,9 +19,11 @@ model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
 
 # Print accuracy
+from sklearn.metrics import accuracy_score
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print("✅ Model Accuracy: {:.2f}%".format(accuracy * 100))
+
 
 # Save model
 joblib.dump(model, "diabetes_model.pkl")
