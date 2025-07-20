@@ -9,6 +9,14 @@ import os
 model_path = os.path.join(os.path.dirname(__file__), "diabetes_model.pkl")
 model = joblib.load(model_path)
 
+# Load and display model accuracy
+try:
+    with open("model_accuracy.txt", "r") as f:
+        acc = float(f.read())
+    st.success(f"✅ Model Accuracy: {acc*100:.2f}%")
+except:
+    st.warning("⚠️ Model accuracy not available.")
+
 # Input form
 st.header("Enter Patient Data")
 pregnancies = st.number_input("Pregnancies", 0, 20)
