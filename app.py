@@ -5,7 +5,9 @@ import numpy as np
 st.title("🩺 Diabetes Prediction App")
 
 # Load the trained model
-model = joblib.load("diabetes_model.pkl")
+import os
+model_path = os.path.join(os.path.dirname(__file__), "diabetes_model.pkl")
+model = joblib.load(model_path)
 
 # Input form
 st.header("Enter Patient Data")
