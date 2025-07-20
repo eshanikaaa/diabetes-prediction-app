@@ -4,6 +4,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 import joblib
 
+print("🏁 Starting training...")
+
 # Load dataset
 df = pd.read_csv("diabetes.csv")
 
