@@ -15,7 +15,7 @@ A simple web application built with **Streamlit** that predicts whether a person
 
 ## How to Use
 
-1. Visit the live app 👉 [Click here](https://diabetes-prediction-app-jjbxpthkppqvw7aqj32rum.streamlit.app/#enter-patient-data)
+1. Visit the live app 👉 [Click here](https://diabetes-prediction-app-jjbxpthkppqvw7aqj32rum.streamlit.app/)
 2. Enter values for:
    - Pregnancies
    - Glucose
