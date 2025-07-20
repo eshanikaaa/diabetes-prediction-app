@@ -38,3 +38,7 @@ print("✅ Improved Model Accuracy: {:.2f}%".format(accuracy * 100))
 # Save model
 joblib.dump(model, 'diabetes_model.pkl')
 
+# Save accuracy to a text file
+with open("model_accuracy.txt", "w") as f:
+    f.write(str(accuracy))
+
