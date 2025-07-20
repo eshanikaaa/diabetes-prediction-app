@@ -4,14 +4,21 @@ import numpy as np
 import joblib
 import matplotlib.pyplot as plt
 
-# Load trained model
-model = joblib.load('diabetes_model.pkl')
+st.title("Diabetes Prediction App")
 
-# Page title
-st.title('Diabetes Prediction App')
+@st.cache_data
+def load_data():
+    return pd.read_csv("diabetes.csv")
 
-# Sidebar input
-st.sidebar.header('Input Patient Data')
+@st.cache_resource
+def load_model():
+    return joblib.load("diabetes_model.pkl")
+
+# Load files once
+df = load_data()
+model = load_model()
+
+st.sidebar.header("Input Patient Data")
 
 def user_input():
     pregnancies = st.sidebar.number_input('Pregnancies', 0, 20, 1)
@@ -22,41 +29,27 @@ def user_input():
     bmi = st.sidebar.number_input('BMI', 0.0, 70.0, 25.0)
     dpf = st.sidebar.number_input('Diabetes Pedigree Function', 0.0, 3.0, 0.5)
     age = st.sidebar.number_input('Age', 10, 100, 30)
+    return pd.DataFrame([{
+        'Pregnancies': pregnancies, 'Glucose': glucose, 'BloodPressure': bp,
+        'SkinThickness': skin, 'Insulin': insulin, 'BMI': bmi,
+        'DiabetesPedigreeFunction': dpf, 'Age': age
+    }])
 
-    data = {
-        'Pregnancies': pregnancies,
-        'Glucose': glucose,
-        'BloodPressure': bp,
-        'SkinThickness': skin,
-        'Insulin': insulin,
-        'BMI': bmi,
-        'DiabetesPedigreeFunction': dpf,
-        'Age': age
-    }
-    return pd.DataFrame([data])
+input_df = user_input()
 
-df = user_input()
+if st.sidebar.button("Predict"):
+    pred = model.predict(input_df)[0]
+    proba = model.predict_proba(input_df)[0]
+    st.subheader("Prediction:")
+    st.write("🟢 Not Diabetic" if pred == 0 else "🔴 Diabetic")
+    st.subheader("Probability:")
+    st.write(f"Not Diabetic: {proba[0]:.2f}, Diabetic: {proba[1]:.2f}")
 
-st.subheader('Input Data')
-st.write(df)
+    st.subheader("Feature Importance (Coefficients)")
+    coeffs = model.coef_[0]
+    features = input_df.columns
+    fig, ax = plt.subplots()
+    ax.barh(features, coeffs)
+    ax.set_xlabel("Coefficient Value")
+    st.pyplot(fig)
 
-# Make prediction
-pred = model.predict(df)[0]
-proba = model.predict_proba(df)[0]
-
-st.subheader('Prediction Result')
-st.write('🧬 Diabetic' if pred == 1 else '✅ Not Diabetic')
-
-st.subheader('Probability')
-st.write(f"Not Diabetic: {proba[0]:.2f}")
-st.write(f"Diabetic: {proba[1]:.2f}")
-
-# Coefficients instead of feature_importances_
-st.subheader('Feature Importance (Model Coefficients)')
-coefficients = model.coef_[0]
-features = df.columns
-
-fig, ax = plt.subplots()
-ax.barh(features, coefficients)
-ax.set_xlabel("Coefficient Value")
-st.pyplot(fig)
